@@ -1,0 +1,169 @@
+<html>
+   <style>
+      .timer,.stimer {
+      margin:8px;
+      display: inline-block;
+      }
+      .timerWrapper {
+      text-align: center;
+      font-size: 60px;
+      color: tomato;
+      display: block;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin-bottom: 30px;
+      }
+      .maintimerWrapper {
+      width: 100%;
+      max-width: 500px;
+      margin:0 auto;
+      }
+      button {
+      padding: 10px 20px;
+      }
+      .buttons {
+      display: flex;
+      justify-content: space-around;
+      }
+      .laps li {
+      list-style: none;
+      }
+   </style>
+   <div class="maintimerWrapper">
+      <div class="timerWrapper"><span class="timer">00</span> : <span class="stimer">00</span></div>
+      <div class="buttons">
+         <button id='timerStartButton' onclick="starButtonClick()">Start</button>
+         <button id='timerStopButton' onclick="stopButtonClick()" disabled>Stop</button>
+         <button id='timerLapButton' onclick="lapButtonClick()" disabled>Lap</button>
+         <button id='timerResetButton' onclick="resetButtonClick()" disabled>Reset</button>
+      </div>
+      <h3>Laps</h3>
+      <span class="clearLap"></span>
+      <div class="laps"></div>
+   </div>
+   <script>
+      var startButton=document.querySelector('#timerStartButton');
+      var stopButton=document.querySelector('#timerStopButton');
+      var resetButton=document.querySelector('#timerResetButton');
+      var lapButton=document.querySelector('#timerLapButton');
+      
+      var fullTimerHtml=document.querySelector('.timerWrapper').innerHTML;
+      
+      var lapsHtml=document.querySelector('.laps').innerHTML;
+      
+      var currentTimerValue=0;
+      var scurrentTimerValue=0;
+      var laps=0;
+      
+      var timerInterval 
+      var stimerInterval
+      
+      function timerIntervalStart() {
+         timerInterval = setInterval(timerUp, 1000);
+      
+      }
+      
+      function stimerIntervalStart() {
+         stimerInterval = setInterval(stimerUp, 10);
+      
+      }
+      
+      function timerUp() {
+         if (currentTimerValue<9) { 
+          currentTimerValue+=1;
+          document.querySelector('.timer').innerHTML='0'+currentTimerValue;}  
+          else {
+              currentTimerValue+=1;
+          document.querySelector('.timer').innerHTML=currentTimerValue;}  
+          
+      }
+      
+      function stimerUp() {
+          if (scurrentTimerValue<9) {
+              scurrentTimerValue+=1;
+              document.querySelector('.stimer').innerHTML='0'+scurrentTimerValue;
+          }
+          if (scurrentTimerValue<99) {
+              scurrentTimerValue+=1;
+              document.querySelector('.stimer').innerHTML=scurrentTimerValue;
+          }
+          else {scurrentTimerValue=0; }
+         
+      }
+      
+      function starButtonClick () {
+          timerIntervalStart();
+          stimerIntervalStart();
+          startButton.disabled=true;
+          stopButton.disabled=false;
+          resetButton.disabled=true;
+          lapButton.disabled=false;
+      
+      
+      }
+      function lapButtonClick() {
+          if (laps==0) {
+              document.querySelector('.clearLap').innerHTML='<button onclick="clearLaps()">Clear Laps</button>';
+          }
+          //  var fullTimerHtml=document.querySelector('.timerWrapper').innerHTML;
+          //var lapsHtml=document.querySelector('.laps').innerHTML;
+          document.querySelector('.laps').innerHTML+='<li><b>Lap '+(laps+1) + '</b>: ' + document.querySelector('.timerWrapper').innerHTML +'</li>';
+          laps+=1;
+          
+      
+      }
+      function clearLaps() {
+          document.querySelector('.clearLap').innerHTML='';
+          document.querySelector('.laps').innerHTML='';
+      }
+      function stopButtonClick() {
+          clearInterval(timerInterval);
+          clearInterval(stimerInterval);
+          startButton.disabled=false;
+          stopButton.disabled=true;
+          resetButton.disabled=false;
+          lapButton.disabled=true;
+          startButton.innerText='Resume';
+      
+      
+      
+      }
+      function resetButtonClick() {
+          document.querySelector('.timer').innerHTML=0;
+          document.querySelector('.stimer').innerHTML=0;
+      
+          currentTimerValue=0;
+          scurrentTimerValue=0;
+      
+          stopButtonClick();
+          startButton.disabled=false;
+          stopButton.disabled=true;
+          resetButton.disabled=true;
+          lapButton.disabled=true;
+          startButton.innerText='Start';
+      
+      
+      }
+      document.onkeydown = checkKey;
+      
+      function checkKey(e) {
+      
+          e = e || window.event;
+      
+          if (e.keyCode == '67') {
+              clearLaps ();
+          }
+          if (e.keyCode == '82') {
+              resetButtonClick ();
+          }
+          if (e.keyCode == '83') {
+              starButtonClick ();
+          }
+          if (e.keyCode == '84') {
+              stopButtonClick ();
+          }
+          if (e.keyCode == '76') {
+              lapButtonClick ();
+          }
+      }
+   </script>
+</html>
